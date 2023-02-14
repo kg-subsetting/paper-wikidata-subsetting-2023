@@ -1,0 +1,30 @@
+prefix geo:      <http://www.opengis.net/ont/geosparql#> 
+prefix p:        <http://www.wikidata.org/prop/> 
+prefix pq:       <http://www.wikidata.org/prop/qualifier/> 
+prefix pr:       <http://www.wikidata.org/prop/reference/> 
+prefix prov:     <http://www.w3.org/ns/prov#> 
+prefix ps:       <http://www.wikidata.org/prop/statement/> 
+prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> 
+prefix schema:   <http://schema.org/> 
+prefix skos:     <http://www.w3.org/2004/02/skos/core#> 
+prefix wd:       <http://www.wikidata.org/entity/> 
+prefix wdno:     <http://www.wikidata.org/prop/novalue/> 
+prefix wds:      <http://www.wikidata.org/entity/statement/> 
+prefix wdt:      <http://www.wikidata.org/prop/direct/> 
+prefix wikibase: <http://wikiba.se/ontology#> 
+prefix xsd:      <http://www.w3.org/2001/XMLSchema#> 
+
+
+select (count(?x) as ?count_x) ?count_hasPart  where {
+  
+ ?x wdt:P31 wd:Q423026  . 
+
+ { SELECT (count(?y) as ?count_hasPart) WHERE {
+    ?x wdt:P31 wd:Q423026  .
+    ?x wdt:P361 ?y .
+    ?y wdt:P31 wd:Q417841.
+  } 
+ } 
+
+} group by ?count_hasPart 

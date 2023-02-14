@@ -1,0 +1,88 @@
+PREFIX sc: <http://purl.org/science/owl/sciencecommons/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+
+select (count(?gene) as ?totalGene) 
+ ?Label_en ?Desc_en ?Alias_en 
+ ?Label_es ?Desc_es ?Alias_es 
+ ?Label_fa ?Desc_fa ?Alias_fa 
+ ?Label_nl ?Desc_nl ?Alias_nl {
+  ?gene wdt:P31 wd:Q7187 .
+  { select (count(?geneLabel) as ?Label_en) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene rdfs:label ?geneLabel .
+      filter (lang(?geneLabel)='en')
+  }}
+  { select (count(?geneDesc) as ?Desc_en) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene schema:description ?geneDesc .
+      filter (lang(?geneDesc)='en')
+  }}
+  { select (count(?geneAlias) as ?Alias_en) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene skos:altLabel ?geneAlias .
+      filter (lang(?geneAlias)='en')
+  }}
+  { select (count(?geneLabel) as ?Label_es) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene rdfs:label ?geneLabel .
+      filter (lang(?geneLabel)='es')
+  }}
+  { select (count(?geneDesc) as ?Desc_es) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene schema:description ?geneDesc .
+      filter (lang(?geneDesc)='es')
+  }}
+  { select (count(?geneAlias) as ?Alias_es) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene skos:altLabel ?geneAlias .
+      filter (lang(?geneAlias)='es')
+  }}
+  { select (count(?geneLabel) as ?Label_fa) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene rdfs:label ?geneLabel .
+      filter (lang(?geneLabel)='fa')
+  }}
+  { select (count(?geneDesc) as ?Desc_fa) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene schema:description ?geneDesc .
+      filter (lang(?geneDesc)='fa')
+  }}
+  { select (count(?geneAlias) as ?Alias_fa) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene skos:altLabel ?geneAlias .
+      filter (lang(?geneAlias)='fa')
+  }}
+  { select (count(?geneLabel) as ?Label_nl) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene rdfs:label ?geneLabel .
+      filter (lang(?geneLabel)='nl')
+  }}
+    { select (count(?geneDesc) as ?Desc_nl) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene schema:description ?geneDesc .
+      filter (lang(?geneDesc)='nl')
+  }}
+  { select (count(?geneAlias) as ?Alias_nl) where {
+      ?gene wdt:P31 wd:Q7187 .
+      ?gene skos:altLabel ?geneAlias .
+      filter (lang(?geneAlias)='nl')
+  }}
+} 
+group by 
+ ?Label_en 
+ ?Desc_en
+ ?Alias_en
+ ?Label_es
+ ?Desc_es
+ ?Alias_es
+ ?Label_fa
+ ?Desc_fa
+ ?Alias_fa
+ ?Label_nl
+ ?Desc_nl
+ ?Alias_nl

@@ -1,0 +1,88 @@
+PREFIX sc: <http://purl.org/science/owl/sciencecommons/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+
+select (count(?taxon) as ?totalTaxon) 
+ ?Label_en ?Desc_en ?Alias_en 
+ ?Label_es ?Desc_es ?Alias_es 
+ ?Label_fa ?Desc_fa ?Alias_fa 
+ ?Label_nl ?Desc_nl ?Alias_nl {
+  ?taxon wdt:P31 wd:Q16521 .
+  { select (count(?taxonLabel) as ?Label_en) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon rdfs:label ?taxonLabel .
+      filter (lang(?taxonLabel)='en')
+  }}
+  { select (count(?taxonDesc) as ?Desc_en) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon schema:description ?taxonDesc .
+      filter (lang(?taxonDesc)='en')
+  }}
+  { select (count(?taxonAlias) as ?Alias_en) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon skos:altLabel ?taxonAlias .
+      filter (lang(?taxonAlias)='en')
+  }}
+  { select (count(?taxonLabel) as ?Label_es) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon rdfs:label ?taxonLabel .
+      filter (lang(?taxonLabel)='es')
+  }}
+  { select (count(?taxonDesc) as ?Desc_es) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon schema:description ?taxonDesc .
+      filter (lang(?taxonDesc)='es')
+  }}
+  { select (count(?taxonAlias) as ?Alias_es) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon skos:altLabel ?taxonAlias .
+      filter (lang(?taxonAlias)='es')
+  }}
+  { select (count(?taxonLabel) as ?Label_fa) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon rdfs:label ?taxonLabel .
+      filter (lang(?taxonLabel)='fa')
+  }}
+  { select (count(?taxonDesc) as ?Desc_fa) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon schema:description ?taxonDesc .
+      filter (lang(?taxonDesc)='fa')
+  }}
+  { select (count(?taxonAlias) as ?Alias_fa) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon skos:altLabel ?taxonAlias .
+      filter (lang(?taxonAlias)='fa')
+  }}
+  { select (count(?taxonLabel) as ?Label_nl) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon rdfs:label ?taxonLabel .
+      filter (lang(?taxonLabel)='nl')
+  }}
+    { select (count(?taxonDesc) as ?Desc_nl) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon schema:description ?taxonDesc .
+      filter (lang(?taxonDesc)='nl')
+  }}
+  { select (count(?taxonAlias) as ?Alias_nl) where {
+      ?taxon wdt:P31 wd:Q16521 .
+      ?taxon skos:altLabel ?taxonAlias .
+      filter (lang(?taxonAlias)='nl')
+  }}
+} 
+group by 
+ ?Label_en 
+ ?Desc_en
+ ?Alias_en
+ ?Label_es
+ ?Desc_es
+ ?Alias_es
+ ?Label_fa
+ ?Desc_fa
+ ?Alias_fa
+ ?Label_nl
+ ?Desc_nl
+ ?Alias_nl
