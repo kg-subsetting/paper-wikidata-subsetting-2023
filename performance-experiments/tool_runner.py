@@ -86,7 +86,7 @@ def run_kgtk(dump: Path) -> int:
     print('Starting a new run of KGTK ...')
     print('=================================')
     start_time = datetime.now()
-    process = subprocess.Popen('kgtk --debug --timing --progress import-wikidata -i {0} --node nodefile.tsv --edge edgefile.tsv --qual qualfile.tsv --use-mgzip-for-input True --use-mgzip-for-output True --use-shm True --procs 6 --mapper-batch-size 5 --max-size-per-mapper-queue 3 --single-mapper-queue True --collect-results True --collect-seperately True --collector-batch-size 10 --collector-queue-per-proc-size 3 --progress-interval 500000 --fail-if-missing False'.format(str(dump)), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    process = subprocess.Popen('kgtk --debug --timing --progress import-wikidata -i {0} --node nodefile.tsv --edge edgefile.tsv --qual qualfile.tsv --use-mgzip-for-input True --deprecated --use-mgzip-for-output True --use-shm True --procs 32 --mapper-batch-size 5 --max-size-per-mapper-queue 3 --single-mapper-queue True --collector-batch-size 10 --collector-queue-per-proc-size 3 --progress-interval 500000 --fail-if-missing False'.format(str(dump)), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
     command = '''kgtk query --gc ./wikidata.sqlite3.db -i edgefile.tsv --match '(n1)-[:P31]->(class), (n1)-[p]->(n2)'  --where 'class IN ["Q11173","Q12136","Q7187","Q8054"]' --return 'n1, p, n2' > ./kgtk_output.tsv'''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
