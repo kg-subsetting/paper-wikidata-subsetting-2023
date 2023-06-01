@@ -4,7 +4,7 @@ import itertools
 import multiprocessing
 from datetime import datetime
 
-def count_instances_worker(dump: str, start_line: int, end_line: int):
+def count_instances_worker(dump: str, start_line: int, end_line: int, strip_len: int):
     genes = 0
     proteins = 0
     chemicals = 0
@@ -30,7 +30,7 @@ def count_instances_worker(dump: str, start_line: int, end_line: int):
         
         for line_number, line in enumerate(itertools.islice(d, end_line - start_line + 1), start=start_line):            
             try:
-                data = json.loads(line[:-2])
+                data = json.loads(line[:strip_len])
             except Exception as e:
                 print('Error processing line {0}: {1}'.format(line_number,e))
                 continue
@@ -68,6 +68,9 @@ def count_instances_worker(dump: str, start_line: int, end_line: int):
             if is_gene:
                 genes += 1
                 gene_statements += statement_ctr
+                with open('genes.txt', 'a') as gl:
+                    gl.write(data['id'])
+                    gl.write('\n')
             if is_protein:
                 proteins += 1
                 protein_statements += statement_ctr
@@ -89,6 +92,10 @@ if __name__ == '__main__':
     dump = sys.argv[1]
     lines = int(sys.argv[2])
     cores = int(sys.argv[3])
+    if len(sys.argv) == 5 and sys.argv[4] == 'wdf':
+        strip_len = -1
+    else:
+        strip_len = -2
 
     chunk_size = lines // cores
     chunks = [(i * chunk_size + 1, (i + 1) * chunk_size) for i in range(cores - 1)]
@@ -97,7 +104,7 @@ if __name__ == '__main__':
         
     pool = multiprocessing.Pool(cores)
     start_time = datetime.now()
-    results = pool.starmap(count_instances_worker, [(dump, start_line, end_line) for start_line, end_line in chunks])
+    results = pool.starmap(count_instances_worker, [(dump, start_line, end_line, strip_len) for start_line, end_line in chunks])
     end_time = datetime.now()
     
     output_dict = {
