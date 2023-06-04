@@ -15,7 +15,7 @@ def count_instances(tsv_file):
     chemical_statements = len(df.loc[df['node1'].isin(chemicals)])
     disease_statements = len(df.loc[df['node1'].isin(diseases)])
     
-    with open('genes_output.txt', 'w') as f:
+    with open('genes_kgtk.txt', 'w') as f:
         [f.write(f'{line}\n') for line in genes]
     print('Genes: ', len(genes))
     print('Proteins: ', len(proteins))
