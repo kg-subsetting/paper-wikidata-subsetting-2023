@@ -88,16 +88,22 @@ def run_kgtk(dump: Path) -> int:
     start_time = datetime.now()
     process = subprocess.Popen('kgtk --debug --timing --progress import-wikidata -i {0} --node nodefile.tsv --edge edgefile.tsv --qual qualfile.tsv --use-mgzip-for-input True --use-mgzip-for-output True --use-shm True --procs 6 --mapper-batch-size 5 --max-size-per-mapper-queue 3 --single-mapper-queue True --collect-results True --collect-seperately True --collector-batch-size 10 --collector-queue-per-proc-size 3 --progress-interval 500000 --fail-if-missing False'.format(str(dump)), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
+    end_time_import = datetime.now()
     command = '''kgtk query --gc ./wikidata.sqlite3.db -i edgefile.tsv --match '(n1)-[:P31]->(class), (n1)-[p]->(n2)'  --where 'class IN ["Q11173","Q12136","Q7187","Q8054"]' --return 'n1, p, n2' > ./kgtk_output.tsv'''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     process.wait()
-
     end_time = datetime.now()
-    run_time = end_time - start_time
+    total_run_time = end_time - start_time
+    import_time = end_time_import - start_time
+    query_time = end_time - end_time_import
     print('=================================')
-    print('DONE KGTK, Exec time: {0}'.format(run_time.total_seconds()))
+    print('DONE KGTK, Exec total time: {0}, import Wikidata time: {1}({2}%), query time: {3}({4}%)'.format(total_run_time.total_seconds(),import_time.total_seconds(),round((import_time.total_seconds()/total_run_time.total_seconds())*100,1),query_time.total_seconds(),round((query_time.total_seconds()/total_run_time.total_seconds())*100,1)))
     with open('kgtk_run_'+datetime.today().strftime('%Y-%m-%d-%H:%M:%S')+'.txt', 'w') as file:
-        file.write(str(run_time))
+        file.write(str(total_run_time))
+        file.write('\n')
+        file.write(str(import_time))
+        file.write('\n')
+        file.write(str(query_time))
 
 
 
