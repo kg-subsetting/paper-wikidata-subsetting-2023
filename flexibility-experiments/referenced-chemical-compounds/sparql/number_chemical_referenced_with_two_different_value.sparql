@@ -1,0 +1,17 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX ps:   <http://www.wikidata.org/prop/statement/>
+PREFIX p:    <http://www.wikidata.org/prop/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT DISTINCT ?chemical_compound
+WHERE{
+   ?chemical_compound p:P31 ?statement.
+   ?statement ps:P31 wd:Q11173.
+   ?statement prov:wasDerivedFrom ?reference1 .
+   ?reference1 pr:P854 ?refvalue1.
+   ?statement prov:wasDerivedFrom ?reference2 .
+   ?reference2 pr:P854 ?refvalue2.
+   FILTER(?refvalue1 != ?refvalue2)
+}
